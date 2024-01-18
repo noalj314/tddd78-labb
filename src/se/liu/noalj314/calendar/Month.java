@@ -22,6 +22,9 @@ public class Month
 	this.number = number;
 	this.days = days;
     }
+    public static boolean isMonthValid(String month) {
+	return MONTH_NAME_TO_NUMBER.containsKey(month);
+    }
     public String getName() {
 	return name;
     }

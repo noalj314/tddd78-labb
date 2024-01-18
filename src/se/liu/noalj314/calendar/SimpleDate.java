@@ -25,7 +25,7 @@ public class SimpleDate
     }
 
     @Override public String toString() {
-	return day + " of " +  month.getName() + " " + year;
+	return day + "th of " +  month.getName() + " " + year;
     }
 
     public static void main(String[] args) {
