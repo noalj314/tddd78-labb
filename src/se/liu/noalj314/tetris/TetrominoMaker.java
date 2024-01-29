@@ -32,7 +32,7 @@ public class TetrominoMaker
 	    default:
 		throw new IllegalArgumentException("Invalid index: " + n);
 	}
-	return polySquare;
+	return new Poly(polySquare);
     }
     public SquareType[][] getI(){
 	return new SquareType[][] {
