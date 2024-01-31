@@ -1,6 +1,7 @@
 package se.liu.noalj314.tetris;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board
@@ -11,13 +12,13 @@ public class Board
     private final static Random RND = new Random();
     private Poly falling;
     private Point fallingPos;
+    private ArrayList<BoardListener> listeners;
 
     public Board(final int width, final int height) {
 	this.width = width;
 	this.height = height;
 	this.squares = new SquareType[height][width];
-	this.falling = new TetrominoMaker().getPoly(1);
-	this.fallingPos = new Point(width / 2, 0);
+	this.listeners = new ArrayList<>();
 	for (int heightIndex = 0; heightIndex < height; heightIndex++) {
 	    for (int widthIndex = 0; widthIndex < width; widthIndex++) {
 		this.squares[heightIndex][widthIndex] = SquareType.EMPTY;
@@ -45,16 +46,17 @@ public class Board
 	}
 	return squares[y][x];
     }
+
     public SquareType getVisibleSquareAt(int y, int x) {
 	if (falling != null) { // if block is  falling
-	    int blockY = y - fallingPos.y; // Positionen i x-led
-	    int blockX = x - fallingPos.x; // Positionen i y-led
+	    int blockY = y - fallingPos.y; // Positionen i y-led
+	    int blockX = x - fallingPos.x; // Positionen i x-led
 	    // Kontrollera om positionen ligger inom blockets dimensioner
 	    if (blockX >= 0 && blockX < falling.getWidth() &&
 		blockY >= 0 && blockY < falling.getHeight()) {
 
 		// Hämta SquareType för den positionen inom blocket
-		SquareType square = falling.getShape()[blockY][blockX];
+		SquareType square = falling.getShape()[blockY][blockX]; //byt ut .getShape
 
 		// Om det inte är en EMPTY, returnera denna SquareType
 		if (square != SquareType.EMPTY) {
@@ -62,24 +64,39 @@ public class Board
 		}
 	    }
 	}
-
 	// Om det inte finns något fallande block på denna position,
 	// returnera SquareType från brädet
 	return squares[y][x];
     }
-    public void randomSquares() {
-	for (int heightIndex = 0; heightIndex < height; heightIndex++) {
-	    for (int widthIndex = 0; widthIndex < width; widthIndex++) {
-		SquareType[] squareTypes = SquareType.values();
-		int randomIndex = RND.nextInt(squareTypes.length);
-		squares[heightIndex][widthIndex] = squareTypes[randomIndex];
-	    }
+   public void tick(){
+	if (falling == null) {
+	    TetrominoMaker maker = new TetrominoMaker();
+	    int randomNumber = RND.nextInt(maker.getNumberOfTypes());
+	    Poly newBlock = maker.getPoly(randomNumber); // 1-6
+	    setFalling(newBlock, new Point(width / 2, 0));
+	} else {
+	    moveFalling();
 	}
+	notifyListeners();
+   }
+   public void setFalling(Poly block, Point startPosition){
+	this.falling = block;
+	this.fallingPos = startPosition;
     }
 
-
+    public void moveFalling(){
+	fallingPos.y += 1;
+    }
+    public void addBoardListener(BoardListener bl) {
+	listeners.add(bl);
+    }
+    private void notifyListeners() {
+	for (BoardListener bl : listeners) {
+		bl.boardChanged();
+	}
+    }
     public static void main(String[] args) {
-	Board myBoard = new Board(10, 10);
+	Board myBoard = new Board(100, 10);
 	System.out.println(myBoard.getSquareType(0, 0));
     }
 

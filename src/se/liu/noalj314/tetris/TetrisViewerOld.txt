@@ -1,31 +1,34 @@
 package se.liu.noalj314.tetris;
+
 import javax.swing.*;
 import java.awt.*;
 
 
-public class TetrisViewer
+public class TetrisViewerOld
 {
     private Board board;
     private Timer timer;
-    private TetrisComponent tetrisComponent;
-    public TetrisViewer(Board board) {
+    private JTextArea area;
+    public TetrisViewerOld(Board board) {
         this.board = board;
-        this.tetrisComponent = new TetrisComponent(board);
     }
     public void show() {
         JFrame frame = new JFrame("Tetris");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        area = new JTextArea(board.getHeight(), board.getWidth());
+        area.setText(new BoardToTextConverter().convertToText(board));
+        area.setFont(new Font("Monospaced", Font.PLAIN, 20));
         frame.setLayout(new BorderLayout());
-        frame.add(tetrisComponent, BorderLayout.CENTER);
+        frame.add(area, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
-        board.tick();
+
         startTimer();
     }
 
     private void startTimer() {
-        StepMaker stepMaker = new StepMaker(board);
+        StepMaker stepMaker = new StepMaker(board, Tet);
         timer = new Timer(1000, stepMaker);
         timer.start();
     }
