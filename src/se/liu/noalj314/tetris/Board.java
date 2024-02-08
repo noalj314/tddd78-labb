@@ -2,6 +2,7 @@ package se.liu.noalj314.tetris;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Board
@@ -12,9 +13,9 @@ public class Board
     private final static Random RND = new Random();
     private Poly falling;
     private Point fallingPos;
-    private static int MARGIN = 2;
-    private static int DBL_MARGIN = MARGIN * 2;
-    private ArrayList<BoardListener> listeners;
+    private final static int MARGIN = 2;
+    private final static int DBL_MARGIN = MARGIN * 2;
+    private List<BoardListener> listeners;
     public Board(final int width, final int height) {
 	this.width = width;
 	this.height = height;
@@ -24,9 +25,7 @@ public class Board
 	fallingPos = null;
 	for (int heightIndex = 0; heightIndex < squares.length; heightIndex++) {
 	    for (int widthIndex = 0; widthIndex < squares[heightIndex].length; widthIndex++) {
-		if (heightIndex < MARGIN || heightIndex >= height + MARGIN) {
-		    squares[heightIndex][widthIndex] = SquareType.OUTSIDE;
-		} else if (widthIndex < MARGIN || widthIndex >= width + MARGIN) {
+		if (heightIndex < MARGIN || heightIndex >= height + MARGIN || widthIndex < MARGIN || widthIndex >= width + MARGIN) {
 		    squares[heightIndex][widthIndex] = SquareType.OUTSIDE;
 		} else {
 		    squares[heightIndex][widthIndex] = SquareType.EMPTY;

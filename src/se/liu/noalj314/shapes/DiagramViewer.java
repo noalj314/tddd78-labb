@@ -11,28 +11,26 @@ public class DiagramViewer extends JComponent
     private final static List<Color> COLORS =
 	    List.of(Color.BLACK, Color.RED, Color.GREEN, Color.BLUE,
 		    Color.CYAN, Color.YELLOW, Color.MAGENTA);
-
-    // Set a fixed seed 0 so you always get the same
-    // shapes (for debugging)
-    private final static Random rnd = new Random(0);
+    
+    private final static Random RND = new Random(0);
 
     private static Color getRandomColor() {
-	return COLORS.get(rnd.nextInt(COLORS.size()));
+	return COLORS.get(RND.nextInt(COLORS.size()));
     }
 
     private static Circle getRandomCircle() {
-	return new Circle(rnd.nextInt(400), rnd.nextInt(400),
-			  rnd.nextInt(200), getRandomColor());
+	return new Circle(RND.nextInt(400), RND.nextInt(400),
+			  RND.nextInt(200), getRandomColor());
     }
 
     private static Rectangle getRandomRectangle() {
-	return new Rectangle(rnd.nextInt(400), rnd.nextInt(400),
-			     rnd.nextInt(200), rnd.nextInt(200),
+	return new Rectangle(RND.nextInt(400), RND.nextInt(400),
+			     RND.nextInt(200), RND.nextInt(200),
 			     getRandomColor());
     }
 
     private static Text getRandomText() {
-	return new Text(rnd.nextInt(400), rnd.nextInt(400),
+	return new Text(RND.nextInt(400), RND.nextInt(400),
 			10, "Hello", getRandomColor());
     }
 
@@ -40,10 +38,10 @@ public class DiagramViewer extends JComponent
 
 	DiagramComponent comp = new DiagramComponent();
 
-	final Random rnd = new Random(0);
+	final Random RND = new Random(0);
 
 	for (int i = 0; i < 10; i++) {
-	    switch (rnd.nextInt(3)) {
+	    switch (RND.nextInt(3)) {
 		case 0:
 		    comp.addShape(getRandomCircle());
 		    break;

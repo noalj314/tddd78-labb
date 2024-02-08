@@ -3,10 +3,11 @@ package se.liu.noalj314.shapes;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiagramComponent extends JComponent
 {
-    private ArrayList<Shape> shapes;
+    private List<Shape> shapes;
     public DiagramComponent() {
 	this.shapes = new ArrayList<Shape>();
     }

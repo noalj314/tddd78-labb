@@ -27,7 +27,7 @@ public class TimeSpan
     public static void main(String[] args) {
 	TimePoint start = new TimePoint(9, 5);
 	TimePoint end = new TimePoint(10, 5);
-	TimeSpan newTS = new TimeSpan(start, end);
-	System.out.println(newTS);
+	TimeSpan newTimeSpan = new TimeSpan(start, end);
+	System.out.println(newTimeSpan);
     }
 }

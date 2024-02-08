@@ -21,10 +21,10 @@ public class TetrisComponent extends JComponent implements BoardListener
 	in.put(KeyStroke.getKeyStroke("UP"), "rotateRight");
 
 	final ActionMap am = this.getActionMap();
-	am.put("moveLeft", new moveAction(Direction.LEFT));
-	am.put("moveRight", new moveAction(Direction.RIGHT));
-	am.put("rotateLeft", new rotateAction(Direction.LEFT));
-	am.put("rotateRight", new rotateAction(Direction.RIGHT));
+	am.put("moveLeft", new MoveAction(Direction.LEFT));
+	am.put("moveRight", new MoveAction(Direction.RIGHT));
+	am.put("rotateLeft", new RotateAction(Direction.LEFT));
+	am.put("rotateRight", new RotateAction(Direction.RIGHT));
     }
     @Override
     public Dimension getPreferredSize() {
@@ -63,20 +63,20 @@ public class TetrisComponent extends JComponent implements BoardListener
     @Override public void boardChanged() {
 	repaint();
     }
-    private class moveAction extends AbstractAction {
+    private class MoveAction extends AbstractAction {
 	private final Direction direction;
 
-	private moveAction(Direction direction) {
+	private MoveAction(Direction direction) {
 	    this.direction = direction;
 	}
 	@Override public void actionPerformed(ActionEvent e) {
 	    board.move(direction);
 	}
     }
-    private class rotateAction extends AbstractAction {
+    private class RotateAction extends AbstractAction {
 	private final Direction direction;
 
-	private rotateAction(Direction direction) {
+	private RotateAction(Direction direction) {
 	    this.direction = direction;
 	}
 	@Override public void actionPerformed(ActionEvent e) {

@@ -23,7 +23,7 @@ public class TimePoint
     }
 
     public static void main(String[] args) {
-	TimePoint newTP = new TimePoint(9, 5);
-	System.out.println(newTP);
+	TimePoint newTimePoint = new TimePoint(9, 5);
+	System.out.println(newTimePoint);
     }
 }

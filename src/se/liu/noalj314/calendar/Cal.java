@@ -21,9 +21,9 @@ public class Cal
     public void book(int year, String month, int day, int startHour, int startMinute, int endHour,
 		     int endMinute, String subject) {
 	if (isaBoolean(year, month, startHour, startMinute, endHour, endMinute, day)) {
-	    	TimePoint startTP = new TimePoint(startHour, startMinute);
-		TimePoint endTP = new TimePoint(endHour, endMinute);
-		TimeSpan timespan = new TimeSpan(startTP, endTP);
+	    	TimePoint startTimePoint = new TimePoint(startHour, startMinute);
+		TimePoint endTimePoint = new TimePoint(endHour, endMinute);
+		TimeSpan timespan = new TimeSpan(startTimePoint, endTimePoint);
 		Month mon = new Month(month, Month.getMonthNumber(month),Month.getMonthDays(month));
 		SimpleDate date = new SimpleDate(year, mon, day);
 		Appointment app = new Appointment(subject, date, timespan);

@@ -22,16 +22,16 @@ public class Appointment
     }
 
     @Override public String toString() {
-	return subject + " " + date.toString() + " " + timespan.toString();
+	return subject + " " + date + " " + timespan;
     }
 
     public static void main(String[] args) {
 	TimePoint start = new TimePoint(9, 5);
 	TimePoint end = new TimePoint(10, 5);
-	TimeSpan newTS = new TimeSpan(start, end);
+	TimeSpan newTimeSpan = new TimeSpan(start, end);
 	Month newMonth = new Month("April", 4, 30);
 	SimpleDate newDate = new SimpleDate(2000, newMonth, 10);
-	Appointment newApp = new Appointment("Programmering", newDate, newTS);
+	Appointment newApp = new Appointment("Programmering", newDate, newTimeSpan);
 	System.out.println(newApp);
     }
 }
