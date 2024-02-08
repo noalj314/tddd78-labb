@@ -13,18 +13,22 @@ public class TetrisViewer
         this.tetrisComponent = new TetrisComponent(board);
     }
     public void show() {
-        JFrame frame = new JFrame("Tetris");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setLayout(new BorderLayout());
-        frame.add(tetrisComponent, BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
-        board.tick();
-        startTimer();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Running");
+                JFrame frame = new JFrame("Tetris");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setLayout(new BorderLayout());
+                frame.add(tetrisComponent, BorderLayout.CENTER);
+                frame.pack();
+                frame.setVisible(true);
+                startTimer();
+            }
+        });
     }
 
-    private void startTimer() {
+    public void startTimer() {
         StepMaker stepMaker = new StepMaker(board);
         timer = new Timer(1000, stepMaker);
         timer.start();

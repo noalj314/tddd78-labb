@@ -12,7 +12,6 @@ public class StepMaker extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Penis");
         board.tick();  // funkar
     }
 }

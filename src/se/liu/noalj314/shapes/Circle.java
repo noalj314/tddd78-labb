@@ -23,9 +23,6 @@ public class Circle extends AbstractShape
 	return radius;
     }
 
-    @Override public Color getColor() {
-	return color;
-    }
 
     @Override public void draw(final Graphics g) {
 	g.setColor(color);

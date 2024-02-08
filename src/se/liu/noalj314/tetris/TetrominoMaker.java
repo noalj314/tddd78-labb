@@ -3,7 +3,7 @@ package se.liu.noalj314.tetris;
 public class TetrominoMaker
 {
     public int getNumberOfTypes() {
-	return SquareType.values().length - 1; // Eftersom vi inte räknar med empty
+	return SquareType.values().length - 3; // Eftersom vi inte räknar med empty, test, eller outside
     }
     public Poly getPoly(int n) {
 	SquareType[][] polySquare;
@@ -44,8 +44,8 @@ public class TetrominoMaker
     }
     public SquareType[][] getO(){
 	return new SquareType[][] {
-		{SquareType.O, SquareType.O, SquareType.O, SquareType.O},
-		{SquareType.O, SquareType.O, SquareType.O, SquareType.O}
+		{ SquareType.O, SquareType.O},
+		{ SquareType.O, SquareType.O}
 	};
     }
     public SquareType[][] getT(){
@@ -81,6 +81,12 @@ public class TetrominoMaker
 		{SquareType.EMPTY, SquareType.EMPTY, SquareType.L},
 		{SquareType.L, SquareType.L, SquareType.L},
 		{SquareType.EMPTY, SquareType.EMPTY, SquareType.EMPTY},
+	};
+    }
+    public SquareType[][] getTest() {
+	return new SquareType[][] {
+		{SquareType.TEST},
+
 	};
     }
 }
