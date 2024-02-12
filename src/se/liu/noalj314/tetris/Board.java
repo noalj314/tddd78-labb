@@ -1,8 +1,10 @@
 package se.liu.noalj314.tetris;
 
+import javax.swing.*;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Board
@@ -16,6 +18,11 @@ public class Board
     private final static int MARGIN = 2;
     private final static int DBL_MARGIN = MARGIN * 2;
     private List<BoardListener> listeners;
+    private int score = 0;
+    public boolean isGameOver = false;
+    private HighscoreList highscoreList = new HighscoreList();
+
+
     public Board(final int width, final int height) {
 	this.width = width;
 	this.height = height;
@@ -23,6 +30,7 @@ public class Board
 	this.listeners = new ArrayList<>();
 	falling = null;
 	fallingPos = null;
+
 	for (int heightIndex = 0; heightIndex < squares.length; heightIndex++) {
 	    for (int widthIndex = 0; widthIndex < squares[heightIndex].length; widthIndex++) {
 		if (heightIndex < MARGIN || heightIndex >= height + MARGIN || widthIndex < MARGIN || widthIndex >= width + MARGIN) {
@@ -33,7 +41,7 @@ public class Board
 	    }
 	}
     }
-
+    public HighscoreList getHighscoreList(){return highscoreList;}
     public Poly getFalling() {
 	return falling;
     }
@@ -47,6 +55,13 @@ public class Board
     public int getWidth() {
 	return width;
     }
+    public int getScore(){
+	return score;
+    }
+    public int getDblMargin(){
+	return DBL_MARGIN;
+    }
+
 
     public SquareType getSquareType(int y, int x) {
 	return squares[y + MARGIN][x + MARGIN];
@@ -80,8 +95,13 @@ public class Board
 	    fallingPos= new Point(getWidth() / 2 - falling.getWidth() / 2, 0);
 	    setFalling(falling, fallingPos);
 	    shiftRows();
-	    while (gameOver()){
-		// infinite loop
+	    gameOver(); //to check if  it is game over
+	    if (isGameOver){
+		highscoreList.addHighscore(new Highscore(JOptionPane.showInputDialog("Enter name!"), score));
+		restartGame();
+		notifyListeners();
+
+		//falling = null;
 	    }
 	} else {
 	    dropFalling();
@@ -171,6 +191,7 @@ public class Board
     	}
 
     public void shiftRows() {
+	int rowsRemoved = 0;
 	for (int y = height + MARGIN - 1; y >= MARGIN; y--) {
 	    if (isRowFull(y)) {
 		// flytta ner alla rader ovanför den här raden
@@ -186,18 +207,47 @@ public class Board
 		// eftedrsom en rad har tagits bort och alla rader ovanför har flyttats ner så
 		// öka y så att nästa for kör samma index igen
 		y++;
+		rowsRemoved ++;
 	    }
 	}
+	if (rowsRemoved > 0) {
+	    updateScore(rowsRemoved);
+	}
+    }
+    private void updateScore(int rowsRemoved){
+	Map<Integer, Integer> pointMap = Map.of(1, 100, 2, 300, 3, 500, 4, 800);
+	score += pointMap.get(rowsRemoved);
     }
 
-    public boolean gameOver()    {
-    		if (hasCollision()) {
-			return true;
-		}
-		    return false;
+    public boolean gameOver() {
+	if (hasCollision()) {
+	    isGameOver = true;
+	} else {
+	    isGameOver = false;
 	}
+	return isGameOver;
+    }
     public void addBoardListener(BoardListener bl) {
 	listeners.add(bl);
+    }
+    public void clear(){
+	for (int heightIndex = 0; heightIndex < squares.length; heightIndex++) {
+	    for (int widthIndex = 0; widthIndex < squares[heightIndex].length; widthIndex++) {
+		if (heightIndex < MARGIN || heightIndex >= height + MARGIN || widthIndex < MARGIN || widthIndex >= width + MARGIN) {
+		    this.squares[heightIndex][widthIndex] = SquareType.OUTSIDE;
+		} else {
+		    this.squares[heightIndex][widthIndex] = SquareType.EMPTY;
+		}
+	    }
+	}
+	score = 0;
+	notifyListeners();
+    }
+    public boolean getisGameOver(){
+	return isGameOver;
+    }
+    public void restartGame(){
+	clear();
     }
     private void notifyListeners() {
 	for (BoardListener bl : listeners) {

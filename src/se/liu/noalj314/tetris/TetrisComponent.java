@@ -35,11 +35,12 @@ public class TetrisComponent extends JComponent implements BoardListener
     private static EnumMap<SquareType, Color > createColorMap() {
 	EnumMap<SquareType, Color> map = new EnumMap<>(SquareType.class);
 	map.put(SquareType.S, Color.GREEN);
-	map.put(SquareType.T, Color.PINK);
+	map.put(SquareType.T, Color.MAGENTA);
 	map.put(SquareType.O, Color.YELLOW);
 	map.put(SquareType.J, Color.BLUE);
 	map.put(SquareType.Z, Color.RED);
 	map.put(SquareType.L, Color.ORANGE);
+	map.put(SquareType.I, Color.CYAN);
 	map.put(SquareType.EMPTY, Color.GRAY);
 	map.put(SquareType.TEST, Color.BLACK);
 	return map;
@@ -48,16 +49,19 @@ public class TetrisComponent extends JComponent implements BoardListener
     @Override protected void paintComponent( Graphics g) {
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
+	g2d.setColor(Color.GREEN);
+	g.drawString(String.valueOf(board.getScore()), 6, 6);
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		SquareType squareType = board.getVisibleSquareAt(y, x);
 		g2d.setColor(SQUARECOLORS.get(squareType));
 		g2d.fillRect(x * SQUARESIZE, y * SQUARESIZE, SQUARESIZE, SQUARESIZE);
-		g2d.setColor(Color.WHITE);
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.drawRect(x * SQUARESIZE,y * SQUARESIZE, SQUARESIZE, SQUARESIZE);
 	    }
 	}
+	g2d.setColor(Color.GREEN);
+	g.drawString(String.valueOf(board.getScore()), board.getDblMargin()*2, board.getDblMargin()*3);
     }
 
     @Override public void boardChanged() {
