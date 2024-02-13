@@ -1,21 +1,27 @@
 package se.liu.noalj314.tetris;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;;
 
-public class HighscoreComponent extends JComponent implements BoardListener
+
+public class HighscoreComponent extends JComponent
 {
     private HighscoreList highscores;
     private Board board;
     public boolean playAgain = false;
+    private static final int SCORE_WIDTH = 300;
+    private static final int SCORE_HEIGHT = 400;
+    private String listAsJson;
 
     public HighscoreComponent(HighscoreList highscores, Board board) {
 	this.highscores = highscores;
+
+
 	this.board = board;
-	board.addBoardListener(this);
 	this.setFocusable(true);
 	this.requestFocusInWindow();
 
@@ -26,7 +32,8 @@ public class HighscoreComponent extends JComponent implements BoardListener
 	actionMap.put("space", new AbstractAction() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		boolean playAgain = true;
+		System.out.println("space pressed");
+		HighscoreComponent.this.playAgain = true;
 	    }
 	});
 
@@ -35,14 +42,20 @@ public class HighscoreComponent extends JComponent implements BoardListener
     @Override protected void paintComponent(Graphics g) {
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
-	for (int i = 0;  i < 10; i++) {
+	g.drawString("Press space to start again!", 20, 20);
+	int i = 1;
+	for (Highscore currentScore: highscores.getHighscorelist()) {
+	    System.out.println(currentScore);
 	    try {
-		g.drawString(highscores.getHighscore(i), 1+i*10, 1+i*10);
-	    } catch(RuntimeException ignored) {
+		g.drawString(currentScore.toString(), 35,35*i);
+		i++;
+	    } catch (RuntimeException ignored) {
 	    }
 	}
     }
-    @Override public void boardChanged() {
-	repaint();
+	@Override public Dimension getPreferredSize() {
+	    return new Dimension(SCORE_WIDTH, SCORE_HEIGHT);
+	}
     }
-}
+
+

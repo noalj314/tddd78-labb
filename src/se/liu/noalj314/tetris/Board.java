@@ -20,7 +20,7 @@ public class Board
     private List<BoardListener> listeners;
     private int score = 0;
     public boolean isGameOver = false;
-    private HighscoreList highscoreList = new HighscoreList();
+    public boolean pauseGame = false;
 
 
     public Board(final int width, final int height) {
@@ -41,7 +41,6 @@ public class Board
 	    }
 	}
     }
-    public HighscoreList getHighscoreList(){return highscoreList;}
     public Poly getFalling() {
 	return falling;
     }
@@ -97,11 +96,7 @@ public class Board
 	    shiftRows();
 	    gameOver(); //to check if  it is game over
 	    if (isGameOver){
-		highscoreList.addHighscore(new Highscore(JOptionPane.showInputDialog("Enter name!"), score));
-		restartGame();
 		notifyListeners();
-
-		//falling = null;
 	    }
 	} else {
 	    dropFalling();

@@ -19,12 +19,24 @@ public class TetrisComponent extends JComponent implements BoardListener
 	in.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
 	in.put(KeyStroke.getKeyStroke("DOWN"), "rotateLeft");
 	in.put(KeyStroke.getKeyStroke("UP"), "rotateRight");
+	in.put(KeyStroke.getKeyStroke("SPACE"), "space");
+
 
 	final ActionMap am = this.getActionMap();
 	am.put("moveLeft", new MoveAction(Direction.LEFT));
 	am.put("moveRight", new MoveAction(Direction.RIGHT));
 	am.put("rotateLeft", new RotateAction(Direction.LEFT));
 	am.put("rotateRight", new RotateAction(Direction.RIGHT));
+	am.put("space", new AbstractAction() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (!board.pauseGame) {
+		    board.pauseGame = true;
+		} else{
+		    board.pauseGame = false;
+		}
+	    }
+	});
     }
     @Override
     public Dimension getPreferredSize() {
@@ -74,7 +86,9 @@ public class TetrisComponent extends JComponent implements BoardListener
 	    this.direction = direction;
 	}
 	@Override public void actionPerformed(ActionEvent e) {
-	    board.move(direction);
+	    if (!board.pauseGame) {
+		board.move(direction);
+	    }
 	}
     }
     private class RotateAction extends AbstractAction {
@@ -84,7 +98,9 @@ public class TetrisComponent extends JComponent implements BoardListener
 	    this.direction = direction;
 	}
 	@Override public void actionPerformed(ActionEvent e) {
-	    board.rotate(direction);
+	    if (!board.pauseGame) {
+		board.rotate(direction);
+	    }
 	}
     }
 }

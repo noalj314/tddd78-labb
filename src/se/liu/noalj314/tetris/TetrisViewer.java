@@ -8,9 +8,14 @@ import java.awt.event.ActionListener;
 public class TetrisViewer extends JFrame
 {
     private Board board;
+    private HighscoreList highscoreList = new HighscoreList();
+
     private Timer timer;
     private TetrisComponent tetrisComponent;
-    private HighscoreComponent highscoreComponent;
+    private HighscoreComponent highscoreComponent = null;
+    private boolean gameOverScreenActive;
+    private int timerDelay = 750;
+    private int timerCounter = 0;
 
     public TetrisViewer(Board board) {
         this.showStartImage();
@@ -25,21 +30,37 @@ public class TetrisViewer extends JFrame
         startTimer();
     }
     public void gameOverScreen(){
-        this.highscoreComponent = new HighscoreComponent(board.getHighscoreList(), board);
+        highscoreList.addHighscore(new Highscore(JOptionPane.showInputDialog("Enter name!"), board.getScore()));
+        if (highscoreComponent != null) {
+            this.remove(highscoreComponent);
+        }
+        this.highscoreComponent = new HighscoreComponent(highscoreList, board);
+
         this.remove(tetrisComponent);
         this.add(highscoreComponent,  BorderLayout.CENTER);
         this.pack();
         this.setVisible(true);
         this.repaint();
         this.validate();
+        gameOverScreenActive = true;
     }
 
     public void startGame(){
-        this.remove(highscoreComponent);
+        // Check if highscoreComponent exists and reset or remove it
+        gameOverScreenActive = false;
+
+        if (highscoreComponent != null) {
+            this.remove(highscoreComponent);
+            highscoreComponent = null;
+            // Setup highscoreComponent as necessary
+        }
+        board.clear(); // Reset the board state
+        board.isGameOver = false; // Reset game over state
         this.add(tetrisComponent, BorderLayout.CENTER);
         this.pack();
         this.setVisible(true);
-        startTimer();
+        this.repaint(); // Refresh frame to reflect changes
+        timer.start(); // Restart the game timer
     }
 
     public void startTimer() {
@@ -47,18 +68,23 @@ public class TetrisViewer extends JFrame
         {
             @Override public void actionPerformed(final ActionEvent e) {
                 if (!board.isGameOver) {
-                    board.tick();
-                } else if (highscoreComponent.playAgain) {
+                    if (!board.pauseGame) {
+                        board.tick();
+                    }
+                } else if (highscoreComponent != null && highscoreComponent.playAgain) {
                     startGame();
-                    board.isGameOver = false;
-                } else {
-                   // timer.stop();
+                } else if (!gameOverScreenActive) {
                     gameOverScreen();
-
+                } if (board.getScore() % 1000 == 0 && board.getScore() != 0) { // increase speed every thousand points
+                    if (timerDelay >= 250) {
+                        timerDelay -= 100;
+                        timer.setDelay(timerDelay);
+                    }
                 }
+                timerCounter += timerDelay;
             }
         };
-        timer = new Timer(500, doOneStep);
+        timer = new Timer(timerDelay, doOneStep);
         timer.setCoalesce(true);
         timer.start();
     }
@@ -82,6 +108,7 @@ public class TetrisViewer extends JFrame
         startDialog.setVisible(true);
         startDialog.pack();
     }
+
 
 
     private class QuitListener implements ActionListener {
