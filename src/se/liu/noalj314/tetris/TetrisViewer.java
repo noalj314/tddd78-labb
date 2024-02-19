@@ -14,7 +14,7 @@ public class TetrisViewer extends JFrame
     private TetrisComponent tetrisComponent;
     private HighscoreComponent highscoreComponent = null;
     private boolean gameOverScreenActive;
-    private int timerDelay = 750;
+    private int timerDelay = 500;
     private int timerCounter = 0;
 
     public TetrisViewer(Board board) {
@@ -48,6 +48,7 @@ public class TetrisViewer extends JFrame
     public void startGame(){
         // Check if highscoreComponent exists and reset or remove it
         gameOverScreenActive = false;
+        timerDelay = 500; // reset timerdelay
 
         if (highscoreComponent != null) {
             this.remove(highscoreComponent);
@@ -75,8 +76,8 @@ public class TetrisViewer extends JFrame
                     startGame();
                 } else if (!gameOverScreenActive) {
                     gameOverScreen();
-                } if (board.getScore() % 1000 == 0 && board.getScore() != 0) { // increase speed every thousand points
-                    if (timerDelay >= 250) {
+                } if (board.getPolyCounter() != 0 && board.getPolyCounter() % 10 == 0) { // increase speed every ten polys
+                    if (timerDelay > 200) {
                         timerDelay -= 100;
                         timer.setDelay(timerDelay);
                     }

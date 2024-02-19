@@ -61,8 +61,6 @@ public class TetrisComponent extends JComponent implements BoardListener
     @Override protected void paintComponent( Graphics g) {
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
-	g2d.setColor(Color.GREEN);
-	g.drawString(String.valueOf(board.getScore()), 6, 6);
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		SquareType squareType = board.getVisibleSquareAt(y, x);
@@ -74,6 +72,9 @@ public class TetrisComponent extends JComponent implements BoardListener
 	}
 	g2d.setColor(Color.GREEN);
 	g.drawString(String.valueOf(board.getScore()), board.getDblMargin()*2, board.getDblMargin()*3);
+	g2d.setColor(Color.BLUE);
+	g.drawString(board.getFallHandler().getDescription(), board.getDblMargin()*2, board.getDblMargin()*7);
+
     }
 
     @Override public void boardChanged() {

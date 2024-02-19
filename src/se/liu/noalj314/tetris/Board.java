@@ -12,24 +12,30 @@ public class Board
     private SquareType[][] squares;
     private int width;
     private int height;
+    private FallHandler fallHandler;
     private final static Random RND = new Random();
     private Poly falling;
     private Point fallingPos;
+    private Point lastFallingPos;
     private final static int MARGIN = 2;
     private final static int DBL_MARGIN = MARGIN * 2;
+
     private List<BoardListener> listeners;
     private int score = 0;
+    private int polyCounter = 0;
     public boolean isGameOver = false;
     public boolean pauseGame = false;
 
 
     public Board(final int width, final int height) {
+	this.fallHandler = new DefaultFallHandler();
 	this.width = width;
 	this.height = height;
 	this.squares = new SquareType[height + DBL_MARGIN][width + DBL_MARGIN];
 	this.listeners = new ArrayList<>();
 	falling = null;
 	fallingPos = null;
+	lastFallingPos = null;
 
 	for (int heightIndex = 0; heightIndex < squares.length; heightIndex++) {
 	    for (int widthIndex = 0; widthIndex < squares[heightIndex].length; widthIndex++) {
@@ -43,6 +49,12 @@ public class Board
     }
     public Poly getFalling() {
 	return falling;
+    }
+    public void setSquareType(SquareType squareType, int x, int y){
+	squares[y + MARGIN][x + MARGIN] = squareType;
+    }
+    public FallHandler getFallHandler() {
+	return fallHandler;
     }
 
     public Point getFallingPos() {
@@ -86,7 +98,12 @@ public class Board
 	// returnera SquareType från brädet
 	return getSquareType(y, x);
     }
-   public void tick(){
+
+    public int getPolyCounter() {
+	return polyCounter;
+    }
+
+    public void tick(){
 	if (falling == null) {
 	    TetrominoMaker maker = new TetrominoMaker();
 	    int randomNumber = RND.nextInt(maker.getNumberOfTypes());
@@ -94,13 +111,22 @@ public class Board
 	    fallingPos= new Point(getWidth() / 2 - falling.getWidth() / 2, 0);
 	    setFalling(falling, fallingPos);
 	    shiftRows();
+	    if (polyCounter % 3 == 0 && polyCounter != 0) {
+		this.fallHandler = new Heavy();
+	    } else if (polyCounter % 2 == 0 && polyCounter != 0) {
+		this.fallHandler = new Fallthrough();
+	    } else {
+		this.fallHandler = new DefaultFallHandler();
+	    }
+	    polyCounter ++;
 	    gameOver(); //to check if  it is game over
 	    if (isGameOver){
 		notifyListeners();
 	    }
 	} else {
+	    lastFallingPos = fallingPos;
 	    dropFalling();
-	    if (hasCollision()){
+	    if (fallHandler.hasCollision(this, lastFallingPos)){
 		fallingPos.y -= 1;
 		addToBoard();
 		falling = null;
@@ -122,13 +148,13 @@ public class Board
 	    switch (direction) {
 		case LEFT:
 		    fallingPos.x -= 1;
-		    if (hasCollision()) {
+		    if (fallHandler.hasCollision(this, lastFallingPos)) {
 			fallingPos.x += 1;
 		    }
 		    break;
 		case RIGHT:
 		    fallingPos.x += 1;
-		    if (hasCollision()) {
+		    if (fallHandler.hasCollision(this, lastFallingPos)) {
 			fallingPos.x -= 1;
 		    }
 		    break;
@@ -150,7 +176,7 @@ public class Board
 		    break;
 	    }
 	    falling = rotated;
-	    if (hasCollision()) {
+	    if (fallHandler.hasCollision(this, lastFallingPos)) {
 		falling = copyFalling;
 	    }
 	}
@@ -215,7 +241,7 @@ public class Board
     }
 
     public boolean gameOver() {
-	if (hasCollision()) {
+	if (fallHandler.hasCollision(this, lastFallingPos)) {
 	    isGameOver = true;
 	} else {
 	    isGameOver = false;

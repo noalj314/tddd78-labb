@@ -14,7 +14,7 @@ import java.io.File;
 
 public class HighscoreList
 {
-    private List<Highscore> highscores;;
+    private List<Highscore> highscores;
     private static final String FILE_PATH = "scores.json";
     public HighscoreList() {
 	this.highscores = readFromFile();
