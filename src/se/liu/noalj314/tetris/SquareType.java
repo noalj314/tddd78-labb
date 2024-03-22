@@ -4,5 +4,5 @@ import java.util.Random;
 
 public enum SquareType
 {
-    TEST, OUTSIDE, EMPTY, I, O, T, S, Z, J, L;
+    TEST, OUTSIDE, EMPTY, I, O, T, S, Z, J, L
 }

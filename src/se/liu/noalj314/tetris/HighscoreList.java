@@ -24,7 +24,7 @@ public class HighscoreList
 	saveToFile();
     }
 
-    public List<Highscore> getHighscorelist() {
+    public List<Highscore> getHighscoreList() {
 	highscores.sort(new ScoreComparator());
 	return highscores;
     }
@@ -55,9 +55,8 @@ public class HighscoreList
 	try (FileReader reader = new FileReader(FILE_PATH)){
 	    Type highscoreListType = new TypeToken<List<Highscore>>(){}.getType();
 	    return gson.fromJson(reader, highscoreListType);
-	} catch (FileNotFoundException e){
-	    return new ArrayList<>();
 	} catch (IOException e){
+	    e.printStackTrace();
 	    return new ArrayList<>();
 	}
 

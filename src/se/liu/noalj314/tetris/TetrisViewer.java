@@ -18,17 +18,19 @@ public class TetrisViewer
     private int timerCounter = 0;
 
     public TetrisViewer(Board board) {
+        this.board = board;
+        this.tetrisComponent = new TetrisComponent(board);
+        startTimer();
+    }
+    public void show(){
         this.jFrame = new JFrame();
         this.showStartImage();
         createMenu();
-        this.board = board;
-        this.tetrisComponent = new TetrisComponent(board);
         this.jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.jFrame.setLayout(new BorderLayout());
         this.jFrame.add(tetrisComponent, BorderLayout.CENTER);
         this.jFrame.pack();
         this.jFrame.setVisible(true);
-        startTimer();
     }
     public void showGameOverScreen(){
         highscoreList.addHighscore(new Highscore(JOptionPane.showInputDialog("Enter name!"), board.getScore()));
@@ -119,9 +121,5 @@ public class TetrisViewer
                 System.exit(0);
             }
         }
-    }
-
-    public JFrame getjFrame() {
-        return jFrame;
     }
 }

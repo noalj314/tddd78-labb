@@ -1,8 +1,5 @@
 package se.liu.noalj314.tetris;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,12 +41,12 @@ public class HighscoreComponent extends JComponent
 	final Graphics2D g2d = (Graphics2D) g;
 	g.drawString("Press space to start again!", 20, 20);
 	int i = 1;
-	for (Highscore currentScore: highscores.getHighscorelist()) {
+	for (Highscore currentScore: highscores.getHighscoreList()) {
 	    System.out.println(currentScore);
 	    try {
 		g.drawString(currentScore.toString(), 35,35*i);
 		i++;
-	    } catch (RuntimeException ignored) {
+	    } catch (NullPointerException ignored) {
 	    }
 	}
     }

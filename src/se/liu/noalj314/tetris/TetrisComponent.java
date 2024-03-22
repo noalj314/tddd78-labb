@@ -2,6 +2,7 @@ package se.liu.noalj314.tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Collections;
 import java.util.EnumMap;
 
 public class TetrisComponent extends JComponent implements BoardListener
