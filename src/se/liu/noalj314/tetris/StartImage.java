@@ -6,8 +6,8 @@ import javax.swing.*;
 
 public class StartImage extends JComponent
 {
-    URL url = ClassLoader.getSystemResource("images/gc.jpeg");
-    final ImageIcon img = new ImageIcon(url);
+    private URL url = ClassLoader.getSystemResource("images/gc.jpeg");
+    private final ImageIcon img = new ImageIcon(url);
 
     public void paintComponent(final Graphics g){
 	final Graphics2D g2d = (Graphics2D) g;
