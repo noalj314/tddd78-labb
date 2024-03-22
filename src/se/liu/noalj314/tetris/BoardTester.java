@@ -6,7 +6,7 @@ public class BoardTester {
 	Board myBoard = new Board(10, 20);
 	TetrisViewer myViewer = new TetrisViewer(myBoard);
 	HighscoreList highscoreList = new HighscoreList();
-	myViewer.show();
+	myViewer.getjFrame().show();
     }
 }
 

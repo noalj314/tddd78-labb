@@ -120,4 +120,8 @@ public class TetrisViewer
             }
         }
     }
+
+    public JFrame getjFrame() {
+        return jFrame;
+    }
 }
