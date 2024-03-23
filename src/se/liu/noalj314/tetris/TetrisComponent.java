@@ -2,14 +2,13 @@ package se.liu.noalj314.tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
 import java.util.EnumMap;
 
 public class TetrisComponent extends JComponent implements BoardListener
 {
     private Board board;
     public static final int SQUARESIZE = 30;
-    private final static EnumMap<SquareType, Color> SQUARECOLORS = createColorMap();
+    private final EnumMap<SquareType, Color> colorMap = createColorMap();
 
     public TetrisComponent(final Board board) {
 	this.board = board;
@@ -45,7 +44,7 @@ public class TetrisComponent extends JComponent implements BoardListener
 				  board.getHeight()*SQUARESIZE);
     }
 
-    private static EnumMap<SquareType, Color > createColorMap() {
+    private static EnumMap<SquareType, Color> createColorMap() {
 	EnumMap<SquareType, Color> map = new EnumMap<>(SquareType.class);
 	map.put(SquareType.S, Color.GREEN);
 	map.put(SquareType.T, Color.MAGENTA);
@@ -65,7 +64,7 @@ public class TetrisComponent extends JComponent implements BoardListener
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		SquareType squareType = board.getVisibleSquareAt(y, x);
-		g2d.setColor(SQUARECOLORS.get(squareType));
+		g2d.setColor(colorMap.get(squareType));
 		g2d.fillRect(x * SQUARESIZE, y * SQUARESIZE, SQUARESIZE, SQUARESIZE);
 		g2d.setColor(Color.LIGHT_GRAY);
 		g2d.drawRect(x * SQUARESIZE,y * SQUARESIZE, SQUARESIZE, SQUARESIZE);

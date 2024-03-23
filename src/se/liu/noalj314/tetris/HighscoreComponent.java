@@ -8,17 +8,15 @@ import java.awt.event.ActionEvent;
 public class HighscoreComponent extends JComponent
 {
     private HighscoreList highscores;
-    private Board board;
     public boolean playAgain = false;
     private static final int SCORE_WIDTH = 300;
     private static final int SCORE_HEIGHT = 400;
-    private String listAsJson;
+    private String listAsJson = null;
 
     public HighscoreComponent(HighscoreList highscores, Board board) {
 	this.highscores = highscores;
 
 
-	this.board = board;
 	this.setFocusable(true);
 	this.requestFocusInWindow();
 
@@ -43,10 +41,9 @@ public class HighscoreComponent extends JComponent
 	int i = 1;
 	for (Highscore currentScore: highscores.getHighscoreList()) {
 	    System.out.println(currentScore);
-	    try {
-		g.drawString(currentScore.toString(), 35,35*i);
+	    if (currentScore != null) {
+		g.drawString(currentScore.toString(), 35, 35 * i);
 		i++;
-	    } catch (NullPointerException ignored) {
 	    }
 	}
     }
